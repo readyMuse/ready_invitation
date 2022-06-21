@@ -1,0 +1,276 @@
+    <style>
+
+      ul{
+        list-style:none;
+      }
+
+      input[type="checkbox"]{
+
+        width: 1.1rem; /*Desired width*/
+
+        height: 1.1rem; /*Desired height*/
+
+        /* cursor: pointer; */
+
+        /* -webkit-appearance: none; */
+
+        /* appearance: none; */
+
+        }
+  
+
+      
+    </style> 
+    <div class="sidebar" >
+      <div class="sidebar-wrapper" style="width: 100%;">
+        <div class="logo" style="padding-left: 20px;">
+       
+          <a href = '/'>
+            <label class="simple-text logo-normal"> Ready Model Awards</label>
+          </a>
+        </div>
+
+        <ul class="nav" >
+          <li class="{% if 'index' in segment %} active {% endif %}">
+
+            <form method="get" action="/filter" style="padding-left: 20px;">
+
+              
+              
+              성별<br>
+              <div style="height:4rem; padding-top: 0.7rem;">
+                <label ><input type="checkbox" name="gender_m" value="man" > 남자 </label>&nbsp;&nbsp;&nbsp;
+                <label style="padding-left: 2rem;"><input type="checkbox" name="gender_w" value="woman" > 여자</label> 
+                <hr  size='7px' width='90%' align='left'> 
+                <br><br>
+              </div>
+              
+              연령<br>
+              <div style="height:4rem; padding-top: 0.7rem; ">
+                <select name="s_age" id="s_age" value="s_age" style="width:40%; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;" >
+                  {% for year in years %}
+                    <option value = "{{year}}"> {{now_year - year + 1}}세({{year}}년)</option>
+                  {% endfor%}
+                </select> ~ <select name="e_age" id="e_age" value="e_age" style="width:40%; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;" >
+                  {% for year in years %}
+                    
+                    <option value = "{{year}}"> {{now_year - year + 1}}세({{year}}년)</option>
+                    
+                  {% endfor%}
+                </select>
+                <br><br>
+                <!-- <input  type="text" id = 's_age' name="s_age" style="width:40%; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff; display:none">  <input  type="text" id = 'e_age' name="e_age"  style=" width:40%; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff; display:none" ><br><br> -->
+                <label><input id = 'ages_10' type="checkbox" name="chk_age" value="10" > 10대</label>&nbsp;&nbsp;&nbsp;
+                <label><input id = 'ages_20' type="checkbox" name="chk_age" value="20" > 20대</label>&nbsp;&nbsp;&nbsp;
+                <label><input id = 'ages_30' type="checkbox" name="chk_age" value="30" > 30대</label>&nbsp;&nbsp;&nbsp;
+                <label><input id = 'ages_40' type="checkbox" name="chk_age" value="40" > 40대</label>&nbsp;&nbsp;
+                <label><input id = 'ages_50' type="checkbox" name="chk_age" value="50" > 50대 이상</label>
+                <hr  size='7px' width='90%' align='left'> 
+              </div>
+              <br>
+              <!-- <input name="hidden_s_age" id="hidden_s_age" style="display:none"/>
+              <input name="hidden_e_age" id="hidden_e_age" style="display:none"/> -->
+             
+              
+
+              <div style="height:4rem; padding-top: 0.7rem; "></div>
+              <strong>구분</strong><br><br>
+              <label><input type="checkbox" id="chk_model" name="chk_model" value="not_tc">
+                모델 ‧‧‧ </label>&nbsp;&nbsp;&nbsp;&nbsp;
+              <label><input  type="checkbox" id="chk_celeb" name="chk_celeb" value="tc">
+                셀럽 ‧‧‧ </label>
+
+
+              <div class='chu' style="display:none">
+                <hr  height="100px" width='90%' align='left' color="white"> 
+                <strong> 알파모델료</strong><br><br>
+                <!-- <input type="text" name="alpha_s_fee" value = 0 style="width:40px"> ~ <input type="text" name="alpha_e_fee" value = 600 style="width:40px"><br><br> -->
+                <label><input type="checkbox" name="alpha_fee" id="alpha_0100" value="0100"> 상훈페이</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="checkbox" name="alpha_fee" id="alpha_0300" value="0300"> 150~300</label><br>
+                <label><input type="checkbox" name="alpha_fee" id="alpha_0500" value="0500"> 350~500</label>&nbsp;&nbsp;&nbsp;
+                <label><input type="checkbox" name="alpha_fee" id="alpha_1000" value="1000"> 550~1000</label>
+                <label><input type="checkbox" name="alpha_fee" id="alpha_2000" value="2000"> 1100~1500</label>&nbsp;&nbsp;
+                <label><input type="checkbox" name="alpha_fee" id="alpha_2010" value="2010"> 1600~2000</label>
+                <label><input type="checkbox" name="alpha_fee" id="alpha_6000" value="6000"> 2100~4000</label>
+                <label><input type="checkbox" name="alpha_fee" id="alpha_8000" value="8000"> 4100~</label><br>
+                <input name="hidden_alpha_fee" id="hidden_alpha_fee" style="display:none"/>
+                <hr  size='7px' width='90%' align='left'> 
+
+                <strong> 추천</strong><br>
+                이미지  <input  type="text" name="s_img" id="s_img" value = 0 style="width:40px; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;">
+                      <input  type="text" name="e_img" id="e_img" value = 0 style="width:40px; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;">
+                      <input type="checkbox" name="btn_score" id="btn_img" value="chk_img"> <br><br>
+
+                호감도  <input  type="text" name="s_fav" id="s_fav" value = 0 style="width:40px; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;"> 
+                      <input  type="text" name="e_fav" id="e_fav"  value = 0 style="width:40px; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;">
+                      <input type="checkbox" name="btn_score" id="btn_fav" value="chk_fav"> <br><br>
+
+                연기력  <input  type="text" name="s_act" id="s_act" value = 0 style="width:40px; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;">
+                      <input  type="text" name="e_act" id="e_act" value = 0  style="width:40px; border: 1px solid #cad1d7; background-color: transparent; color: #ffffff;">
+                      <input type="checkbox" name="btn_score" id="btn_act" value="chk_act"> 
+                      <br>
+                      <input name="hidden_score" id="hidden_score" style="display:none"/>
+                <br>
+
+                <hr  size='7px' width='90%' align='left'> 
+
+                <strong> 정렬</strong><br>
+                <label><input type="radio" name="model_filter" value="thrdays"> 30일추천</label>
+                <label><input type="radio" name="model_filter" value="movchoi"> 영상초이</label>
+                <label><input type="radio" name="model_filter" value="proc"> 프로카운트</label> <br>
+
+                <hr  size='7px' width='90%' align='left'> 
+
+                <input type="checkbox" name="btn_echar" style="color: #ffffff; margin-top: 10px; " /> <strong> 이케아</strong><br>
+
+                <div  class="check-list_echar"  style="display:none;  ">
+                  <br>
+                  <ul style="padding-left: 20px;">
+                    <li><input type="checkbox" name="echar" id="SA" value="SA"/> 숏컷/단발 여자 </li>
+                    <li><input type="checkbox" name="echar" id="SB" value="SB" /> 장발 남자</li>
+                    <li><input type="checkbox" name="echar" id="SC" value="SC" /> 민머리 남자 </li>
+                    <li><input type="checkbox" name="echar" id="SZ" value="SZ" /> 탈모 남자 </li>
+                    <li><input type="checkbox" name="echar" id="S1" value="S1" /> 쌍둥이 </li>
+                    <li><input type="checkbox" name="echar" id="ST" value="ST" /> 혼혈 </li>
+                    <li><input type="checkbox" name="echar" id="SQ" value="SQ" /> 주근깨</li>
+                    <hr  size='7px' width='90%' align='left'> 
+                    <li><input type="checkbox" name="echar" id="S5" value="S5" /> 전문 헤어/손/발 모델</li>
+                    <li><input type="checkbox" name="echar" id="SE" value="SE" /> 헐크 / 바디</li>
+                    <li><input type="checkbox" name="echar" id="SD" value="SD" /> 뚱뚱</li>
+                    <li><input type="checkbox" name="echar" id="SF" value="SF" /> 코믹/엽기/오타쿠</li>
+                    <li><input type="checkbox" name="echar" id="SL" value="SL" /> 타투/피어싱</li>
+                    <hr  size='7px' width='90%' align='left'> 
+                    <li><input type="checkbox" name="echar" id="S9" value="S9" /> 열정</li>
+                    <li><input type="checkbox" name="echar" id="AC" value="AC" /> 중성매력</li>
+                    <li><input type="checkbox" name="echar" id="SH" value="SH" /> 닮은꼴</li>
+                    <li><input type="checkbox" name="echar" id="S4" value="S4" /> 쌘캐/독캐</li>
+                    <li><input type="checkbox" name="echar" id="XE" value="XE" /> 헤어염색/핑키/할리퀸</li>
+                    <hr  size='7px' width='90%' align='left'> 
+                    <li><input type="checkbox" name="echar" id="SG" value="SG" /> 사투리</li>
+                    <li><input type="checkbox" name="echar" id="S2" value="S2" /> 보이스</li>
+                  </ul>
+                 
+                </div><br>
+                <input name="hidden_echar" id="hidden_echar" style="display:none"/>
+                <input name="hidden_rchar" id="hidden_rchar" style="display:none"/>
+                <input type="checkbox" name="btn_rchar" style=" color: #ffffff; " /> <strong> 레케아</strong><br>
+
+                <div  class="check-list_rchar"  style="display:none;  ">
+                  <br>
+                  <ul class="rchar" style="padding-left: 20px;">
+                    <li><input type="checkbox" name="rchar" id="S8" value="S8"/> 이모모델 </li>
+                    <li><input type="checkbox" name="rchar" id="XX" value="XX" /> 실제가족</li>
+                    <li><input type="checkbox" name="rchar" id="S0" value="S0" /> 유아엄빠OK </li>
+                    <li><input type="checkbox" name="rchar" id="SK" value="SK" /> 갤럭시 사용 </li>
+                    <li><input type="checkbox" name="rchar" id="IG" value="IG" /> 아이폰 노출이력</li>
+                    <li><input type="checkbox" name="rchar" id="IP" value="IP" /> 아이폰 사용(갤럭시교체O)</li>
+                    <li><input type="checkbox" name="rchar" id="SP" value="SP" /> 아이폰 사용(갤럭시교체X)</li>
+                    <hr  size='7px' width='90%' align='left'> 
+                    <li><input type="checkbox" name="rchar" id="SI" value="SI"/> 업군A (DJ,밴드,음악관련) </li>
+                    <li><input type="checkbox" name="rchar" id="SJ" value="SJ"/> 업군B (캘리,공방,아트관련) </li>
+                    <li><input type="checkbox" name="rchar" id="SS" value="SS"/> 업군C (발레,무용,요가,댄서) </li>
+                    <li><input type="checkbox" name="rchar" id="SX" value="SX"/> 업군D (레이싱/나레이터) </li>
+                    <li><input type="checkbox" name="rchar" id="SM" value="SM"/> 업군E (뮤지컬) </li>
+                    <li><input type="checkbox" name="rchar" id="F9" value="F9"/> 업군F (구기종목) </li>
+                    <li><input type="checkbox" name="rchar" id="F0" value="F0"/> 한국 전통악기 </li>
+                    <hr  size='7px' width='90%' align='left'> 
+                    <li><input type="checkbox" name="rchar" id="XB" value="XB"/> 익스트림스포츠 </li>
+                    <li><input type="checkbox" name="rchar" id="XA" value="XA"/> 스키, 스케이트, 보드 </li>
+                    <li><input type="checkbox" name="rchar" id="BK" value="BK"/> 바이크</li>
+                    <li><input type="checkbox" name="rchar" id="XV" value="XV"/> 파쿠르</li>
+                    <li><input type="checkbox" name="rchar" id="XF" value="XF"/> 태권도,유도,격투기,무술</li>
+                    <li><input type="checkbox" name="rchar" id="XG" value="XG"/> 모델골프</li>
+                    <li><input type="checkbox" name="rchar" id="XI" value="XI"/> 서핑</li>
+                    <li><input type="checkbox" name="rchar" id="XC" value="XC"/> 외국어</li>
+                    <li><input type="checkbox" name="rchar" id="XD" value="XD"/> 마임</li>
+                    <li><input type="checkbox" name="rchar" id="DR" value="DR"/> 운전면허</li>
+                    <li><input type="checkbox" name="rchar" id="DP" value="DP"/> 감독선호모델</li>
+                  </ul>
+                  
+                </div>
+
+              </div>
+
+
+              <div class='star' style="display:none">
+                <hr  height="100px" width='90%' align='left' color="white"> 
+                <div style="height:4rem; padding-top: 0.7rem;">
+
+                  <strong> 셀럽 모델료 </strong> <br>
+                  <select name="fee_month" style="width:10.5rem; height:1.5rem">
+                    <option value="three_months">3개월</option>
+                    <option value="six_months">6개월</option>
+                    <option value="one_year">1년</option>
+                  </select>
+                </div>
+                  <!-- <input type="text" name="s_fee" value = 0.0 style="width:40px"> ~ <input type="text" name="e_fee" value = 5 style="width:40px; margin-bottom:10px"><br> -->
+
+                <div style="height:5rem; padding-top: 0.7rem;">
+                  <label><input type="radio" name="celeb_fee" id="fee_all" value="fee_all" checked> 전체</label>&nbsp;&nbsp;
+                  <label><input type="radio" name="celeb_fee" id="fee_100m" value="fee_100m"> ~1억</label>&nbsp;&nbsp;
+                  <label><input type="radio" name="celeb_fee" id="fee_400m" value="fee_400m"> 1억~4억</label>&nbsp;&nbsp;
+                  <label><input type="radio" name="celeb_fee" id="fee_400m_" value="fee_400m_"> 4억~</label><br>
+                  <label><input type="checkbox" name="celeb_fee" id="fee_no" value="fee_no" checked> X포함</label>
+                </div>
+                
+                
+                <input name="hidden_celeb_fee" id="hidden_celeb_fee" style="display:none"/>
+                <input name="hidden_celeb_fee_month" id="hidden_celeb_fee_month" style="display:none"/>
+
+                
+                <div style="height:4rem; padding-top: 0.7rem;">
+                  <hr  size='7px' width='90%' align='left'> 
+                  <strong> 순옥스타_정렬 </strong><br>
+                
+                  <label><input type="radio" name="filter_celeb" value="order_register"> 최신등록순</label>
+                  <label><input type="radio" name="filter_celeb" value="recommend"> 추천순</label>
+                  <label><input type="radio" name="filter_celeb" value="s_count"> S카운트순</label> <br>
+                </div><br>  
+                
+                <div style="height:3rem; padding-top: 3rem; padding-bottom: 1.5rem;">
+                  <hr  size='7px' width='90%' align='left'> 
+                  <strong> 셀럽검색 </strong><br>
+                  <label><input type="radio" name="filter_celeb" value="order_realtime"> 실베스타</label>
+                  <label><input type="radio" name="filter_celeb" value="read"> 열람횟수</label> <br>
+                </div>
+
+                <br><br><br>
+                <hr  size='7px' width='90%' align='left'> 
+                <input type="checkbox" name="btn_celeb_section" style="color: #ffffff;" /><strong> 셀럽 섹션 </strong><br><br>
+
+                <div  class="check-list_celeb_section"  style="display:none;  ">
+                  <ul >
+                    <li><input type="checkbox" name='celeb_section' id="celeb_all" value="section_all" checked/>전체</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_singer" value="section_singer" />가수</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_actor" value="section_actor" />연기자</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_idol" value="section_idol" />아이돌</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_entertainment" value="section_entertainment" />예능인</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_broadcast" value="section_broadcast" />방송인</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_celeb" value="section_celeb" />유명인</li>
+                    <li><input type="checkbox" name='celeb_section' id="celeb_youtube" value="section_youtube" />셀럽유튜버</li>
+                  </ul>
+                </div>
+                <input name="hidden_celeb_section" id="hidden_celeb_section" style="display:none"/>
+                
+
+                <li style='display:none'>
+                  검색 기간<br>
+                  <input type='date' name='s_date' id='date1' value='2021-08-31'/>
+                  <input type='date' name='e_date' id='date2' value='2022-05-31'/><br><br>
+                </li>
+
+              </div>
+              
+              <button class="btn btn-outline-success" type="submit" style="margin-top: 2rem;">Search</button>
+
+              
+
+              <br><br><br><br><br><br>
+        </form>
+           
+        </ul>
+        
+      </div>
+    </div>
+
+   

@@ -1,0 +1,1007 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+
+  <script>
+    $(document).ready(function() {
+      $().ready(function() {
+        $sidebar = $('.sidebar');
+        $navbar = $('.navbar');
+        $main_panel = $('.main-panel');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+        sidebar_mini_active = true;
+        white_color = false;
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+
+        var now = new Date();
+
+        $('#s_age').val('10' + '(' + (now.getFullYear() - 9) + ')') 
+        $('#e_age').val('100' + '(' + (now.getFullYear() - 99) + ')')
+        // $('#hidden_s_age').val(['10(2013)', '20(2003)', '30(1993)', '40(1983)', '50(1973)'])
+        // $('#hidden_e_age').val(['19(2004)', '29(1994)', '39(1984)', '49(1974)', '100(1923)'])
+        
+        $('#hidden_celeb_fee').val(['fee_all','three_months'])
+        $('#hidden_celeb_section').val(['section_all','section_singer','section_actor','section_idol','section_entertainment','section_broadcast','section_celeb','section_youtube'])
+        $('input:checkbox[name="celeb_section"]').prop('checked',true);
+
+        
+        _isman = $('input:checkbox[name="gender_m"]').is(":checked")
+        _iswoman = $('input:checkbox[name="gender_w"]').is(":checked")
+
+        var url = location.href;
+
+        var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+        var params = new Array();
+
+        for (var i = 0; i < parameters.length; i++) {
+          params.push(parameters[i].split('=')[0]);
+        }
+
+        var arr_alpha_fee = new Array();
+        var arr_chu_score = new Array();
+        var arr_celeb_section = new Array();
+        var arr_echar = new Array();
+        var arr_rchar = new Array();
+        var hidden_alpha_val = new Array();
+        var hidden_chu_val = new Array();
+        var hidden_section_val = new Array();
+
+        for (var i = 0; i < params.length; i++) {
+          try {
+            if(params[i] != 'chk_age' ){
+              $(`input:checkbox[name=${params[i]}]`).prop('checked',true);
+            }
+
+            
+            ////////////// 나이 입력
+            if(params[i] == 's_age'){
+              $('#' + params[i]).val(parameters[i].split('=')[1]).change()
+            }if(params[i] == 'e_age'){
+              $('#' + params[i]).val(parameters[i].split('=')[1]).change()
+            }
+            //// 나이 체크박스
+            if(params[i] == 'chk_age'){
+              chk_age_id = 'ages_' + parameters[i].split('=')[1]
+              $(`input:checkbox[id=${chk_age_id}]`).prop('checked',true);
+            }
+            /////////////////////////
+
+
+            if(params[i] == 'alpha_fee' ){
+              arr_alpha_fee.push('alpha_' + parameters[i].split('=')[1])
+              $(`input:checkbox[name=alpha_fee]`).prop('checked',false);
+            }
+
+            if(params[i] == 'btn_score' ){
+              arr_chu_score.push(parameters[i].split('=')[1].replace('chk','btn'))
+              $(`input:checkbox[name=btn_score]`).prop('checked',false);
+            }
+            if(params[i] == 'echar' ){
+              arr_echar.push(parameters[i].split('=')[1])
+              $(`input:checkbox[name=echar]`).prop('checked',false);
+            }if(params[i] == 'rchar' ){
+              arr_rchar.push(parameters[i].split('=')[1])
+              $(`input:checkbox[name=rchar]`).prop('checked',false);
+            }if(params[i] == 'celeb_section' ){
+              arr_celeb_section.push(parameters[i].split('=')[1])
+              $(`input:checkbox[name=celeb_section]`).prop('checked',false);
+            }
+            
+
+          } catch (error) {
+            console.log(error)
+          }
+           
+          
+         
+        }
+
+        // 알파모델료 체크
+        for (var i = 0; i < arr_alpha_fee.length; i++) {
+            try {
+                hidden_alpha_val.push(arr_alpha_fee[i].split('_')[1])
+                $(`input:checkbox[id=${arr_alpha_fee[i]}]`).prop('checked',true);
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        $('#hidden_alpha_fee').val(hidden_alpha_val)
+        // hidden_alpha_val.push(arr_alpha_fee[i].split('_')[1])
+
+
+        if(hidden_alpha_val.length == 0){
+          // hidden_alpha_val.push(['0100', '0300', '0500', '1000', '2000', '2010', '6000', '8000'])
+          $('#hidden_alpha_fee').val(['0100', '0300', '0500', '1000', '2000', '2010', '6000', '8000'])
+        }
+        // 추천 점수 체크
+        for (var i = 0; i < arr_chu_score.length; i++) {
+            try {
+                hidden_chu_val.push(arr_chu_score[i].replace('btn', 'chk'))
+                var e_score = arr_chu_score[i].replace('btn', 'e')
+                $(`input:checkbox[id=${arr_chu_score[i]}]`).prop('checked',true);
+                $(`input:text[id=${e_score}]`).val('100');
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        $('#hidden_score').val(hidden_chu_val)
+       
+        // 이케아
+        for (var i = 0; i < arr_echar.length; i++) {
+            try {
+                $(`input:checkbox[id=${arr_echar[i]}]`).prop('checked',true);
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        $('#hidden_echar').val(arr_echar)
+        ///////////////////
+
+        // 레케아
+        
+        if(arr_rchar.length != 0)
+          for (var i = 0; i < arr_rchar.length; i++) {
+              try {
+                  console.log(arr_rchar[i])
+                  $(`input:checkbox[id=${arr_rchar[i]}]`).prop('checked',true);
+
+              } catch (error) {
+                  console.log(error)
+              }
+          }
+          $('#hidden_rchar').val(arr_rchar)
+        ///////////////////
+
+        // 셀럽섹션
+        
+        if(arr_celeb_section.length != 0)
+          for (var i = 0; i < arr_celeb_section.length; i++) {
+              try {
+                  $(`input:checkbox[id=${arr_celeb_section[i].replace('section', 'celeb')}]`).prop('checked',true);
+
+              } catch (error) {
+                  console.log(error)
+              }
+          }
+          $('#hidden_celeb_section').val(arr_celeb_section)
+
+        
+
+        $('input[name="cf"]').click(function(){
+
+
+          var list = new Array();
+
+
+          $('[name="cf_brand"]').each(function(index, item){
+            if((item).id.indexOf('?') == -1){
+              _item = (item).id.replace('?','_');
+              list.push(_item.replace(/\./g,''));
+            }
+            else{
+              list.push((item).id.replace(/\./g,''));
+            }
+          
+          })
+      
+          var ischecked = $('input:checkbox[name="cf"]').is(":checked")
+
+          
+          if (ischecked) {
+
+            var now = new Date();
+            var _month = String(now.getMonth() + 1)
+            var _day = String(now.getDate())
+
+            if(_month.length == 1)
+              _month = '0' + String(now.getMonth() + 1)
+
+            if(_day.length == 1)
+              _day = '0' + String(now.getDate())
+
+            console.log('출력: ', list[i], now.getFullYear() + (_month ) + _day ) 
+
+            for(i=0; i<list.length; i++){
+              
+
+              if(list[i] == ''){
+                $('.not_input').hide();
+              }
+              else if(list[i] <= (now.getFullYear() + (_month ) + _day)){
+                var a = "." + list[i];
+                $(a).hide();
+                
+              }
+              else{
+
+                $("."+list[i]).show();
+
+              }
+            }
+            
+
+          }else{
+            for(i=0; i<list.length; i++){
+              if(list[i] == ''){
+                $('.not_input').hide();
+              }
+              else{
+                $("."+list[i]).show();
+              }
+          }
+            
+          }
+        });
+
+        // 활동현황 
+        $('input[name="activities"]').click(function(){
+
+
+              var list_activity = new Array();
+
+
+              $('[name="title"]').each(function(index, item){
+                // console.log(item.id)
+                list_activity.push(item.id);
+              })
+              // console.log('AAAAAAAAAAAAAAAAAAAA: ',list_activity);
+
+              var _ischecked = $('input:checkbox[name="activities"]').is(":checked");
+
+              // console.log('안녕하세요: ', _ischecked);
+
+              if (_ischecked) {
+
+                var now = new Date();
+                var _month = String(now.getMonth() + 1)
+                var _day = String(now.getDate())
+
+                if(_month.length == 1)
+                  _month = '0' + String(now.getMonth() + 1)
+
+                if(_day.length == 1)
+                  _day = '0' + String(now.getDate())
+
+                // console.log('출력: ', list[i], now.getFullYear() + (_month ) + _day ) 
+
+                for(i=0; i<list_activity.length; i++){
+                  if(list_activity[i] == ''){
+                    $('.not_input').hide();
+                  }
+                  else if(list_activity[i] <= now.getFullYear() + (_month ) + _day){
+                    // console.log(list_activity[i])
+                    var a = "." + list_activity[i];
+                    $(a).hide();
+                    
+                  }
+                  else{
+                    // console.log('출력: ', list_activity[i])
+
+                    $("."+list_activity[i]).show();
+
+                  }
+                }
+                
+
+              }else{
+                  for(i=0; i<list_activity.length; i++){
+                    if(list_activity[i] == ''){
+                    $('.not_input').show();
+                  }
+                  else{
+                    $("."+list_activity[i]).show();
+                  }
+                }
+              }
+              }
+
+
+            );
+
+
+///////////////// 통화메모
+
+            var tmp = '';
+
+            $('.call_title').on('click', function(e){
+
+              var target_id = e.target.id
+              var list_activity = new Array();
+
+              
+              $('input[name="call_title"]').each(function(index, item){
+                
+                console.log(item.value)
+                list_activity.push(item.id);
+              })
+
+              
+              // console.log(list_activity);
+              console.log(target_id);
+              
+              
+              // $('.'+target_id).show();
+              // 리스트에서 target_id빼고 다 hide
+              for(i = 0; i < list_activity.length; i++){
+
+                str = '.'+list_activity[i];
+                if (list_activity[i] == target_id){
+                  console.log('값 확인: ', tmp)
+                  if ((target_id + 'true') == tmp){
+
+                    $('.'+target_id).hide();
+                    tmp = target_id + 'false'
+
+                  }
+                  else{ 
+                    tmp = target_id + 'true'
+                    $('.'+target_id).show();
+                  }
+                }
+                else{
+                  // console.log(str);
+                  $(str).hide();
+
+                }
+              }
+
+              
+            
+            
+            
+            }
+
+
+            );
+//////////////////////
+
+
+///////////////////// 모델 & 셀럽 선택
+
+            $('input[name="chk_model"]').click(function(){
+
+              var _ischecked = $('input:checkbox[name="chk_model"]').is(":checked");
+
+              console.log(_ischecked)
+              if (_ischecked) {
+                $('.chu').show();
+                $('#chk_celeb').prop('checked',false);
+                $('.star').hide();
+              }
+              else
+                $('.chu').hide();
+              }
+            );
+
+            
+            $('input[name="chk_celeb"]').click(function(){
+
+              var _ischecked = $('input:checkbox[name="chk_celeb"]').is(":checked");
+
+              if (_ischecked) {
+
+                $('.star').show();
+                $('#chk_model').prop('checked',false);
+                $('.chu').hide();
+              }
+              else
+                $('.star').hide();
+              }
+
+
+            );
+
+/////////////////////
+
+
+
+
+  // input[type="checkbox"]:checked {
+  //   background: #32e732;
+  //   border: none;
+  // }
+
+
+            // $("input[type='checkbox']").css("width", '0.9rem').css("height", '0.9rem').css("border-radius", '100%').css("border", '1px solid #FFFFFF').css("appearance", 'none')
+            //             .css("cursor", 'pointer')
+
+           
+
+          //   $('.check_sec').css("width", '0.9rem').css("height", '0.9rem').css("border-radius", '10%').css("border", '1px solid #FFFFFF').css("appearance", 'none')
+          //               .css("cursor", 'pointer').css("transition", "background 0.2s")
+
+          //   $('input:checkbox[name="chk_model"]').click(function(){
+             
+
+          //     var chk_box_checked = $('input:checkbox[name="chk_model"]').is(":checked");
+          //     console.log('ddd: ', chk_box_checked)
+          //     if (chk_box_checked){
+          //       $('input:checkbox[name="chk_model"]').css("background", '#000000').css("border", 'none').css("content", 'v')
+                
+          //     }
+          //     else{
+          //       $('input:checkbox[name="chk_model"]').css("background", 'none').css("border", '1px solid #FFFFFF')
+          //     }
+
+          //   })
+
+          //   $('input:checkbox[name="chk_celeb"]').click(function(){
+             
+
+          //    var chk_box_checked = $('input:checkbox[name="chk_celeb"]').is(":checked");
+          //    console.log('ddd: ', chk_box_checked)
+          //    if (chk_box_checked){
+          //      $('input:checkbox[name="chk_celeb"]').css("background", '#000000').css("border", 'none').css("content", 'v')
+          //    }
+          //    else{
+          //      $('input:checkbox[name="chk_celeb"]').css("background", 'none').css("border", '1px solid #FFFFFF')
+          //    }
+
+          //  })
+///////////////////// 이케아/ 레케아
+
+            $('input[name="btn_echar"]' ).click(function(){
+
+              var _ischecked = $('input:checkbox[name="btn_echar"]').is(":checked");
+              
+              if ( _ischecked ){
+
+                $('.check-list_echar').show();
+                console.log($('.sidebar-wrapper').css("overflow-y"))
+                console.log($('.sidebar-wrapper').css("overflow-x"))
+              }
+              else
+                $('.check-list_echar').hide();
+                console.log($('.sidebar-wrapper').css("overflow-y"))
+                console.log($('.sidebar-wrapper').css("overflow-x"))
+              }
+            );
+
+            $('input[name="btn_rchar"]' ).click(function(){
+
+              var _ischecked = $('input:checkbox[name="btn_rchar"]').is(":checked");
+              
+              if ( _ischecked ){
+
+                $('.check-list_rchar').show();
+                console.log($('.sidebar-wrapper').css("overflow-y"))
+                console.log($('.sidebar-wrapper').css("overflow-x"))
+              }
+              else
+                $('.check-list_rchar').hide();
+                console.log($('.sidebar-wrapper').css("overflow-y"))
+                console.log($('.sidebar-wrapper').css("overflow-x"))
+              }
+            );
+            
+
+
+//////////////////////
+
+///////////////////// 이케아 / 레케아 세부 항목
+
+              ///// 이케아 
+            $('input[name="echar"]' ).click(function(){
+
+              var _isSA = $('#SA').is(":checked");
+              var _isSB = $('#SB').is(":checked");
+              var _isSC = $('#SC').is(":checked");
+              var _isSZ = $('#SZ').is(":checked");
+              var _isS1 = $('#S1').is(":checked");
+              var _isST = $('#ST').is(":checked");
+              var _isSQ = $('#SQ').is(":checked");
+
+              var _isS5 = $('#S5').is(":checked");
+              var _isSE = $('#SE').is(":checked");
+              var _isSD = $('#SD').is(":checked");
+              var _isSF = $('#SF').is(":checked");
+              var _isSL = $('#SL').is(":checked");
+
+
+              var _isS9 = $('#S9').is(":checked");
+              var _isAC = $('#AC').is(":checked");
+              var _isSH = $('#SH').is(":checked");
+              var _isXE = $('#XE').is(":checked");
+
+              var _isSG = $('#SG').is(":checked");
+              var _isS2 = $('#S2').is(":checked");
+
+
+
+              var chk_echar = new Array();
+
+              $("input[name='echar']:checked").each(function(index, name) { 
+                var alpha = $(name).val(); 
+                chk_echar.push(alpha);
+              });
+
+              console.log(chk_echar)
+              $('#hidden_echar').val(chk_echar)
+
+              }
+            );
+
+            ///// 레케아 
+            $('input[name="rchar"]' ).click(function(){
+
+              var _isS8 = $('#S8').is(":checked");
+              var _isXX = $('#XX').is(":checked");
+              var _isS0 = $('#S0').is(":checked");
+              var _isSK = $('#SK').is(":checked");
+              var _isIG = $('#IG').is(":checked");
+              var _isIP = $('#IP').is(":checked");
+              var _isSP = $('#SP').is(":checked");
+
+              var _isSI = $('#SI').is(":checked");
+              var _isSJ = $('#SJ').is(":checked");
+              var _isSS = $('#SS').is(":checked");
+              var _isSX = $('#SX').is(":checked");
+              var _isSM = $('#SM').is(":checked");
+              var _isF9 = $('#F9').is(":checked");
+              var _isF0 = $('#F0').is(":checked");
+
+              var _isXB = $('#XB').is(":checked");
+              var _isXA = $('#XA').is(":checked");
+              var _isBK = $('#BK').is(":checked");
+              var _isXV = $('#XV').is(":checked");
+              var _isXF = $('#XF').is(":checked");
+              var _isXG = $('#XG').is(":checked");
+              var _isXI = $('#XI').is(":checked");
+              var _isXC = $('#XC').is(":checked");
+              var _isXD = $('#XD').is(":checked");
+              var _isDR = $('#DR').is(":checked");
+              var _isDP = $('#DP').is(":checked");
+
+
+
+              var chk_rchar = new Array();
+
+              $("input[name='rchar']:checked").each(function(index, name) { 
+                var alpha = $(name).val(); 
+                chk_rchar.push(alpha);
+              });
+
+              console.log(chk_rchar)
+              $('#hidden_rchar').val(chk_rchar)
+
+              }
+              );
+/////////////////////
+
+
+///////////////////// 나이 선택
+
+            $('input[name="chk_age"]' ).click(function(){
+
+              // var _ischecked = $('input:checkbox[name="chk_age"]').is(":checked");
+
+              var _is10 = $('#ages_10').is(":checked");
+              var _is20 = $('#ages_20').is(":checked");
+              var _is30 = $('#ages_30').is(":checked");
+              var _is40 = $('#ages_40').is(":checked");
+              var _is50 = $('#ages_50').is(":checked");
+
+              var chk_ages = new Array();
+              var age_arange = new Array();
+              var a_all = new Array();
+              var hidden_s = new Array();
+              var hidden_e = new Array();
+
+              $("input[name='chk_age']:checked").each(function(index, name) { 
+                var tmpVal = $(name).val(); 
+                chk_ages.push(tmpVal);
+              });
+              
+              console.log(chk_ages)
+
+              
+              var a_10 = ['10' + '(' + ({{now_year}} - 9) + ')', '19' + '(' + ({{now_year}}- 18)  + ')', '10'] 
+              var a_20 = ['20' + '(' + ({{now_year}}- 19) + ')', '29' + '(' + ({{now_year}}- 28) + ')', '20'] 
+              var a_30 = ['30' + '(' + ({{now_year}}- 29) + ')', '39' + '(' + ({{now_year}}- 38) + ')', '30'] 
+              var a_40 = ['40' + '(' + ({{now_year}}- 39) + ')', '49' + '(' + ({{now_year}}- 48) + ')', '40'] 
+              var a_50 = ['50' + '(' + ({{now_year}}- 49) + ')', '100' + '(' + ({{now_year}}- 99) + ')', '50'] 
+        
+              for(j = 0; j< 5; j++){
+                a_all.push(a_10, a_20, a_30, a_40, a_50)
+              }
+             
+              if (chk_ages){
+                for(i = 0; i< chk_ages.length; i++){
+                  for(j = 0; j< 5; j++){
+                    if(chk_ages[i] == a_all[j][2]){
+                      age_arange.push(a_all[j])
+                    }
+                  }
+                }
+                console.log('age_arange입니다: ',age_arange)
+                
+                $('#s_age').val(age_arange[0][0].substr(3,4)).change()
+                $('#e_age').val(age_arange[chk_ages.length-1][1].substr(3,4)).change()
+               
+                for(k = 0; k< age_arange.length; k++){
+                  // console.log(age_arange)
+                  hidden_s.push(age_arange[k][0])
+                  hidden_e.push(age_arange[k][1])
+                }
+                console.log(hidden_s)
+                console.log(hidden_e)
+
+                // $('#hidden_s_age').val(hidden_s)
+                // $('#hidden_e_age').val(hidden_e)
+              }
+
+              else
+                $('.check-list_rchar').hide();
+              
+              }
+            );
+
+///////////////////////////
+
+
+
+///////////////////// 알파모델료 선택
+
+
+            $('input[name="alpha_fee"]' ).click(function(){
+
+              var _is100 = $('#alpha_0100').is(":checked");
+              var _is300 = $('#alpha_0300').is(":checked");
+              var _is500 = $('#alpha_0500').is(":checked");
+              var _is1000 = $('#alpha_1000').is(":checked");
+              var _is2000 = $('#alpha_2000').is(":checked");
+              var _isnoname = $('#alpha_2010').is(":checked");
+              var _is6000 = $('#alpha_6000').is(":checked");
+              var _is8000 = $('#alpha_8000').is(":checked");
+
+              console.log('모델료 TEST: ', _is100, _is6000);
+
+
+              var chk_fees = new Array();
+
+              $("input[name='alpha_fee']:checked").each(function(index, name) { 
+                var alpha = $(name).val(); 
+                chk_fees.push(alpha);
+              });
+              
+              console.log(chk_fees)
+
+              if(chk_fees.length == 0){
+                $('#hidden_alpha_fee').val(['0100', '0300', '0500', '1000', '2000', '2010', '6000', '8000'])
+              }else{
+                $('#hidden_alpha_fee').val(chk_fees)
+              }
+            }
+            );
+
+///////////////////////////
+
+
+///////////////////// 모델 추천 이미지 선택
+
+
+$('input[name="btn_score"]' ).click(function(){
+
+    var _isimg = $('#btn_img').is(":checked");
+    var _isfav = $('#btn_fav').is(":checked");
+    var _isact = $('#btn_act').is(":checked");
+
+    var chk_score = new Array();
+
+    $("input[name='btn_score']:checked").each(function(index, name) { 
+      var alpha = $(name).val(); 
+      chk_score.push(alpha);
+    });
+
+    console.log('점수통합: ',chk_score)
+    $('#hidden_score').val(chk_score)
+    for(i = 0; i <= chk_score.length; i++){
+
+      if (chk_score.indexOf('chk_fav') != -1){
+        $('#s_fav').val(0);
+        $('#e_fav').val(100);
+      }else{
+        $('#s_fav').val(0);
+        $('#e_fav').val(0);
+      }
+
+      if (chk_score.indexOf('chk_img') != -1){
+        $('#s_img').val(0);
+        $('#e_img').val(100);
+      }else{
+        $('#s_img').val(0);
+        $('#e_img').val(0);
+      }
+
+      if (chk_score.indexOf('chk_act') != -1){
+        $('#s_act').val(0);
+        $('#e_act').val(100);
+      }else{
+        $('#s_act').val(0);
+        $('#e_act').val(0);
+      }
+
+    }
+    // $('#hidden_alpha_fee').val(chk_fees)
+
+    }
+);
+
+///////////////////////////
+
+
+//////
+///////////////////// 셀럽모델료 선택
+
+           // 모델료 확인
+           $('input[name="celeb_fee"]' ).click(function(){
+
+              var _isall = $('#fee_all').is(":checked"); // 전체 
+              var _is100m = $('#fee_100m').is(":checked"); // ~1억 
+              var _is400m = $('#fee_400m').is(":checked"); // 1억~4억 
+              var _is400m_ = $('#fee_400m_').is(":checked"); // 4억~
+              var _isno = $('#fee_no').is(":checked"); // x 포함
+             
+              var month = $('select[name="fee_month"]').val()
+
+
+
+              var chk_fees = new Array();
+
+              $("input[name='celeb_fee']:checked").each(function(index, name) { 
+                var alpha = $(name).val(); 
+                chk_fees.push(alpha);
+              });
+
+              chk_fees.push(month);
+              console.log(chk_fees);
+              $('#hidden_celeb_fee').val(chk_fees);
+
+
+            });
+
+            // 개월 수 선택
+            $('select[name="fee_month"]' ).change(function(){
+
+              var _isall = $('#fee_all').is(":checked"); // 전체 
+              var _is100m = $('#fee_100m').is(":checked"); // ~1억 
+              var _is400m = $('#fee_400m').is(":checked"); // 1억~4억 
+              var _is400m_ = $('#fee_400m_').is(":checked"); // 4억~
+              var _isno = $('#fee_no').is(":checked"); // x 포함
+
+              var month = $('select[name="fee_month"]').val()
+
+
+
+              var chk_fees = new Array();
+
+              $("input[name='celeb_fee']:checked").each(function(index, name) { 
+                var alpha = $(name).val(); 
+                chk_fees.push(alpha);
+              });
+
+              chk_fees.push(month);
+              console.log(chk_fees);
+              $('#hidden_celeb_fee').val(chk_fees);
+
+
+              });
+
+///////////////////////////
+            
+///////////////////// 셀럽섹션
+            
+              // 전체 누르면 다 체크 
+            $('#celeb_all' ).click(function(){
+
+              var _isall = $('#celeb_all').is(":checked");
+              if( _isall ){
+                console.log(_isall)
+                $('input:checkbox[name="celeb_section"]').prop('checked',true);
+              }
+
+
+              
+            });
+
+            // 하나라도 해제 하면 전체 해제 시킴.
+            $('input[name="celeb_section"]' ).click(function(){
+
+              var tmp = new Array();
+
+              $("input[name='celeb_section']:checked").each(function(index, name) { 
+                var alpha = $(name).val(); 
+                tmp.push(alpha)
+              });
+
+
+              console.log('eee', tmp)
+
+              if (tmp.length != 8){
+                $('#celeb_all').prop('checked',false);
+              }
+
+              $('#hidden_celeb_section').val(tmp)
+              
+            });
+            
+
+            // 셀럽 섹션 누르면 오픈
+            $('input[name="btn_celeb_section"]' ).click(function(){
+
+            var _ischecked = $('input:checkbox[name="btn_celeb_section"]').is(":checked");
+
+            var _isall = $('#celeb_all').is(":checked");
+            var _issinger = $('#celeb_singer').is(":checked");
+            var _isactor = $('#celeb_actor').is(":checked");
+            var _isidol = $('#celeb_idol').is(":checked");
+            var _isentertainment = $('#celeb_entertainment').is(":checked");
+            var _isbroadcast = $('#celeb_broadcast').is(":checked");
+            var _isceleb = $('#celeb_celeb').is(":checked");
+            var _isyoutube = $('#celeb_youtube').is(":checked");
+
+            console.log(_isall)
+            
+
+            if ( _ischecked ){
+
+              
+              $('.check-list_celeb_section').show();
+              console.log($('.sidebar-wrapper').css("overflow-y"))
+              console.log($('.sidebar-wrapper').css("overflow-x"))
+            }
+            else
+              $('.check-list_celeb_section').hide();
+              console.log($('.sidebar-wrapper').css("overflow-y"))
+              console.log($('.sidebar-wrapper').css("overflow-x"))
+            }
+            );
+
+
+///////////////////// 
+
+///////////////////// 로그아웃 cookie 제거
+
+        $('#logout').click(function(event) {
+
+          $.removeCookie('access_token', { path: '/' });
+          location.replace('/')
+        })
+
+///////////////////// 
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////
+        $('.fixed-plugin a').click(function(event) {
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+
+          
+        });
+
+        $('.fixed-plugin .background-color span').click(function() {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data', new_color);
+          }
+
+          if ($main_panel.length != 0) {
+            $main_panel.attr('data', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data', new_color);
+          }
+        });
+
+        $('.switch-sidebar-mini input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            sidebar_mini_active = false;
+            blackDashboard.showSidebarMessage('Sidebar mini deactivated...');
+          } else {
+            $('body').addClass('sidebar-mini');
+            sidebar_mini_active = true;
+            blackDashboard.showSidebarMessage('Sidebar mini activated...');
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+        });
+
+        $('.switch-change-color input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (white_color == true) {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').removeClass('white-content');
+            }, 900);
+            white_color = false;
+          } else {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').addClass('white-content');
+            }, 900);
+
+            white_color = true;
+          }
+
+
+        });
+
+        $('.light-badge').click(function() {
+          $('body').addClass('white-content');
+          $('#autocompletes').css('border-color', '#000000')
+          $('#autocompletes_coname').css('border-color', '#000000')
+          $('#autocompletes_manager').css('border-color', '#000000')
+          $('#autocompletes_tel').css('border-color', '#000000')
+        });
+
+        $('.dark-badge').click(function() {
+          $('body').removeClass('white-content');
+          $('#autocompletes').css('border-color', '#ffffff')
+          $('#autocompletes_coname').css('border-color', '#ffffff')
+          $('#autocompletes_manager').css('border-color', '#ffffff')
+          $('#autocompletes_tel').css('border-color', '#ffffff')
+        });
+      });
+    });
+
+
+
+
+
+    // history.replaceState({}, null, location.pathname);
+
+
+
+  </script>
+  

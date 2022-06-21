@@ -1,0 +1,16 @@
+# exclude __pycache__ (bytecode .pyc or .pyo) folder and files
+__pycache__
+# exclude env (virtual environment) folder
+*.env
+# exclude database file (if we use sqlite)
+*.db
+# exclude swap files, created by vim/nano editor
+*.swp
+# exclude .coverage file which get generated using pytest-cov
+.coverage
+# exclude htmlcov report folder
+htmlcov
+# 모델 섹션 값
+model.json
+# 키 정보
+api_sms.json

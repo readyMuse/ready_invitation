@@ -1,0 +1,40 @@
+fastapi                # for fastapi
+uvicorn                # for server to run fastapi
+
+sqlalchemy             # for orm
+psycopg2-binary        # database adaptor which is require to connect to postgres via python
+
+python-dotenv          # to store environment variables in .env file, we can store in system, but python-dotenv is recommended
+
+pydantic[email]        # for email-validation
+
+# passlib[bcrypt]      # for password hashing (This gives some error)
+bcrypt                 # required for passlib module
+passlib                # for password hashing
+
+pytest                 # for testing
+requests               # for testing
+
+pytest-cov             # for code coverage report; pytest --cov="." ; pytest --cov="." --cov-report html
+
+python-jose            # for JWT tokens (It's a superset of pyjwt library)
+
+python-multipart       # for form data
+
+jinja2==3.0.3          # for html templates
+
+alembic                # for db migrations
+
+aiofiles               # for serving static files
+
+black                  # for formatting the code command :  black . --exclude=env
+
+fastapi-pagination     # for pagination in fast-api
+
+pymysql
+
+numpy
+
+pandas
+
+striprtf
