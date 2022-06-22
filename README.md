@@ -2,5 +2,4 @@
 
 
 ## How to?
-- cd backend
 
