@@ -3,8 +3,3 @@
 
 ## How to?
 
-
-## gitignore
-- env 파일
-- model.json
-
